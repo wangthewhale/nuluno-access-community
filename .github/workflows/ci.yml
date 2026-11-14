@@ -1,0 +1,20 @@
+name: Access Community independent install
+on: [push, pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npm pack --dry-run
+      - name: Build the independent container
+        run: docker build -t nuluno-access:ci .
+      - name: Start MCP and verify durable revocation in the real container
+        run: node scripts/cloud-container-smoke.mjs

@@ -1,0 +1,25 @@
+{
+  "product": "Nuluno Access Community",
+  "package": "@nuluno/access-community",
+  "version": "0.1.0-alpha.1",
+  "license": "Apache-2.0",
+  "archive": "nuluno-access-community-0.1.0-alpha.1.tgz",
+  "archiveSha256": "486948c5ca3d613c0a405e215e12c68b4a3a0d0ea8d68b9ffe2d8c3a7cc09785",
+  "archiveBytes": 135983,
+  "serverBundleSha256": "7e57b9c2f38fc7574795ffe952ad0d0aec63f6a5c90a51a880e2df6d1f8c41f6",
+  "cleanSourceNpmCi": true,
+  "typecheck": true,
+  "build": true,
+  "controlledTests": {
+    "passed": 41,
+    "failed": 0,
+    "skipped": 0
+  },
+  "cleanConsumerInstalled": true,
+  "productionAuditVulnerabilities": 0,
+  "commercialMailDependenciesPresent": false,
+  "privateMailSignupPublicationAccepted": false,
+  "commercialSuccessVerified": false,
+  "publicSourceRights": "Apache-2.0 Nuluno-owned community files; third-party notices preserved; commercial extension code excluded",
+  "existingSoldFullPackageChanged": false
+}
