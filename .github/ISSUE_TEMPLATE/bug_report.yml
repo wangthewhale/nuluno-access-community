@@ -1,0 +1,35 @@
+name: Reproducible Access bug
+description: Report a scoped access, task, recovery or client defect with redacted evidence.
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: "Report vulnerabilities privately through SECURITY.md. Never attach .env files, bearer/owner keys, OAuth tokens, inbox content, private databases or commercial extension source."
+  - type: input
+    id: version
+    attributes:
+      label: Community version or commit
+      placeholder: "0.1.0-alpha.1 / exact commit"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Runtime and client
+      description: "OS, Node version, MCP/REST/SDK/stdio surface and installation method. No environment dump."
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal safe reproduction
+      description: "Use disposable state and public/synthetic inputs. Describe granted provider/account/action scope without keys. Preserve original task/idempotency identity where relevant."
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected result, actual result and evidence
+      description: "Classify real-provider versus controlled-localhost evidence. Include failures and unknowns; do not resend an uncertain write to reproduce it."
+    validations:
+      required: true

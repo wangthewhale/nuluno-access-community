@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Private security reporting
+    url: https://github.com/wangthewhale/nuluno-access-community/blob/main/SECURITY.md
+    about: Read the private reporting instructions before sharing vulnerability details.

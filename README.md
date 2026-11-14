@@ -67,6 +67,8 @@ These commands are reproducible acceptance procedures, not a claim that every
 host or private pipeline has already passed. Full Access 0.4.x receipts are not
 community receipts.
 
+For the actual isolated Codex CLI read/reuse/revoke result, see the [sanitized external-agent receipt](evidence/actual-codex-community.json). The receipt identifies the evaluated core snapshot and exact package; [Linux CI for that publishing commit](https://github.com/wangthewhale/nuluno-access-community/actions/runs/43561376040) is separate evidence. Neither proves a private mailbox/signup/publication chain or a sales outcome.
+
 ## Keep your own service
 
 ```sh
@@ -198,3 +200,5 @@ redistribute that code under its license, retaining the required notices and
 change disclosures. Trademark rights, platform access, customer data and separate
 commercial extension source rights are not automatically granted. See
 [CONTRIBUTING.md](CONTRIBUTING.md) for contributions and private security reports.
+
+A second [anonymous public-clone installation](evidence/public-clone-2026-11-14.json) independently checked a fresh npm consumer and the Linux container run. Use [Issues](https://github.com/wangthewhale/nuluno-access-community/issues/new/choose) for reproducible first-run reports; do not attach secrets or customer data.

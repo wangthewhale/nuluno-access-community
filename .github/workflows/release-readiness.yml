@@ -1,0 +1,44 @@
+name: Access Community release readiness
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Existing package.json version; this workflow does not bump it
+        required: true
+        default: 0.1.0-alpha.1
+        type: string
+  push:
+    tags:
+      - 'access-community-v*'
+permissions:
+  contents: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck
+      - run: npm test
+      - run: node --test scripts/prepare-release.test.mjs
+      - name: Prepare source-bound community artifacts
+        env:
+          EXPECTED_VERSION: ${{ inputs.version || '' }}
+        run: node scripts/prepare-release.mjs --version "$EXPECTED_VERSION" --output "$RUNNER_TEMP/access-community-release"
+      - name: Retain artifacts for deliberate maintainer review
+        uses: actions/upload-artifact@v4
+        with:
+          name: access-community-release-readiness-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/access-community-release/*.tgz
+            ${{ runner.temp }}/access-community-release/*-source.zip
+            ${{ runner.temp }}/access-community-release/release-manifest.json
+            ${{ runner.temp }}/access-community-release/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 14

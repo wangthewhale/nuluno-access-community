@@ -1,0 +1,34 @@
+name: Adapter or access feature proposal
+description: Explain a concrete task and its permission/readback boundaries.
+title: "[Proposal] "
+body:
+  - type: markdown
+    attributes:
+      value: "Installing an adapter is not account consent or permission. Do not copy private commercial code. Extensions execute as trusted host code, not a sandbox."
+  - type: textarea
+    id: task
+    attributes:
+      label: Concrete user task and applicable conditions
+    validations:
+      required: true
+  - type: textarea
+    id: authority
+    attributes:
+      label: Official API and owner consent requirements
+      description: "Link public provider documentation; identify account/action scopes, expiry, write limits and unavoidable owner steps. Never include a credential or verification code."
+    validations:
+      required: true
+  - type: textarea
+    id: recovery
+    attributes:
+      label: Readback, uncertainty and revocation design
+      description: "How is an original operation reconciled after a lost response? How does future execution stop on revocation? Do not promise exactly-once provider execution."
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence, limitations and source rights
+      description: "Separate proposed behavior, fixtures, real-provider operations and private-account acceptance. Unknown evidence is acceptable; do not imply sales uplift."
+    validations:
+      required: true

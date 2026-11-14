@@ -1,0 +1,86 @@
+{
+  "schema": "nuluno-access-community-actual-codex-acceptance-v1",
+  "observedAt": "2026-11-14T05:33:14.389316+00:00",
+  "passed": true,
+  "product": "Nuluno Access Community",
+  "package": "@nuluno/access-community",
+  "version": "0.1.0-alpha.1",
+  "sourceSnapshot": {
+    "commit": "04cf8c3c9a9475cb2a8168e7a1f91683c39782f9",
+    "sourceDigest": "ce682d46fd1da7c4556b8d3b0e729899393bb8b22d7f0c080e1368bd88d37e68",
+    "manifest": "public-source-manifest.json",
+    "note": "Original evaluated core snapshot. This receipt and the later README link are documentation-only additions; the original source manifest is retained unchanged."
+  },
+  "archiveSha256": "486948c5ca3d613c0a405e215e12c68b4a3a0d0ea8d68b9ffe2d8c3a7cc09785",
+  "serverBundleSha256": "7e57b9c2f38fc7574795ffe952ad0d0aec63f6a5c90a51a880e2df6d1f8c41f6",
+  "client": "actual external Codex CLI with isolated Access MCP configuration",
+  "readPhase": {
+    "exitCode": 0,
+    "toolCalls": [
+      {
+        "tool": "discover_access_capabilities",
+        "status": "completed"
+      },
+      {
+        "tool": "read_public_status",
+        "status": "completed"
+      },
+      {
+        "tool": "read_public_status",
+        "status": "completed"
+      }
+    ],
+    "agentReportedPublicText": true,
+    "otherToolServersObserved": [],
+    "reportedTokenUsage": {
+      "input_tokens": 138910,
+      "cached_input_tokens": 105472,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 457,
+      "reasoning_output_tokens": 0
+    }
+  },
+  "ownerReadbackAfterRevocation": {
+    "taskId": "9825621e-eae9-4476-81f6-f430dc09f9f7",
+    "status": "succeeded",
+    "sourceKind": "native_provider",
+    "resourceId": "117466985005297414",
+    "receiptHash": "fe3a4dc2af54404f1bd0fd43c506877330a5c78625a2c64be1b21c867feaf978",
+    "publicUrl": "https://mastodon.social/@Mastodon/117466985005297414",
+    "publicPostBytes": 313,
+    "untrustedData": true,
+    "providerCalls": 1,
+    "providerWrites": 0,
+    "verifiedReceipts": 1,
+    "revokedKeys": 1
+  },
+  "revokedPhase": {
+    "exitCode": 0,
+    "toolCalls": [],
+    "otherToolServersObserved": [],
+    "directSameKeyMcpHttpStatus": 403,
+    "sameKeyDenied": true,
+    "reportedTokenUsage": {
+      "input_tokens": 51514,
+      "cached_input_tokens": 37888,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 116,
+      "reasoning_output_tokens": 10
+    }
+  },
+  "sameOriginalTaskAndReceiptReused": true,
+  "platformCredentialsExported": false,
+  "privateLogsPromptsOrPathsExported": false,
+  "actualMoneyCost": null,
+  "fullCostMicros": null,
+  "costNote": "CLI-reported tokens are observations, not settled billing. Cache/input counters retain their reported meaning and are not added as separate charges. Actual model, labor, hosting and other complete costs are unknown.",
+  "privateInboxSignupPublicationAccepted": false,
+  "commercialSuccessVerified": false,
+  "linuxCiRunUrl": "https://github.com/wangthewhale/nuluno-access-community/actions/runs/43561376040",
+  "limits": [
+    "Public-data operation only; no private platform grant was used.",
+    "Codex task issued two reads with the same original idempotency key; the owner ledger shows one native provider GET and no writes.",
+    "Revoked CLI had no Access tools; a separate direct request with the same key received HTTP 403.",
+    "Private Gmail verification, signup and publication still require their own real consent and native chain receipts."
+  ]
+}
