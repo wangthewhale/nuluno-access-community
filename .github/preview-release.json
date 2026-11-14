@@ -1,0 +1,38 @@
+{
+  "schema": "nuluno-fixed-preview-publisher-v1",
+  "repository": "wangthewhale/nuluno-access-community",
+  "sourceCommit": "f833a4b8ab095055d45a72056d73a0e4d73a919a",
+  "version": "0.1.0-alpha.1",
+  "tag": "access-community-v0.1.0-alpha.1",
+  "title": "Nuluno Access Community 0.1.0-alpha.1 preview",
+  "notes": "Apache-2.0 Nuluno Access Community 0.1.0-alpha.1 prerelease.\n\nThis release is bound to source commit f833a4b8ab095055d45a72056d73a0e4d73a919a and the reviewed readiness run 43595149251. It contains scoped keys, encrypted vault, persistent tasks, reconciliation/revocation, REST/MCP/SDK and the existing-account Mastodon adapter. Commercial Gmail verification/signup and Threads implementations are not included.\n\nAn actual isolated Codex public-read trial obtained bounded untrusted post text and reused the original task; owner readback recorded one native GET and zero writes. The revoked key was denied. Process-restart demos and the controlled localhost lost-write demonstration retain their separate evidence classes. Private Gmail-to-signup/publication acceptance, sales lift and lower complete costs remain unverified. Official consent, identity checks and CAPTCHA are not bypassed.\n\nThis is not an npm/PyPI publication, a permanent hosted service, or a signed-attestation claim. Four fixed public assets only: npm-format archive, source ZIP, release manifest and SHA256SUMS. The manifest describes readiness before publication.\n",
+  "artifactRunId": 43595149251,
+  "artifactId": 14114310105,
+  "artifactName": "access-community-release-readiness-f833a4b8ab095055d45a72056d73a0e4d73a919a",
+  "manifest": {
+    "schema": "nuluno-access-release-readiness-v1",
+    "sourceField": "sourceCommit",
+    "commercialField": "commercialExtensionIncluded",
+    "expected": {
+      "name": "@nuluno/access-community"
+    }
+  },
+  "files": {
+    "SHA256SUMS": {
+      "sha256": "c20ab4d2a2c915548fb14f1208159837f60f4159eacc88470ea49dce5dde1d29",
+      "bytes": 311
+    },
+    "nuluno-access-community-0.1.0-alpha.1-source.zip": {
+      "sha256": "8070b0c4216a915c2d3f64c1dfd9171e13803b5c7c6691602e599fecbc03e191",
+      "bytes": 149355
+    },
+    "nuluno-access-community-0.1.0-alpha.1.tgz": {
+      "sha256": "fe296a4b410c19d5e043cce6469ae92b779cee71b8feb81c8de2a42cbfdbe3df",
+      "bytes": 137018
+    },
+    "release-manifest.json": {
+      "sha256": "a48923c7186557b587cf8de9502a8200587d3e21e3084ab5fd4f2a7002e2a156",
+      "bytes": 749
+    }
+  }
+}
