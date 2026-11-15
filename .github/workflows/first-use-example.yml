@@ -1,0 +1,35 @@
+name: first-use-public-status
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  actual-public-status:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci --ignore-scripts
+      - run: npm run build
+      - name: Actual public status artifact
+        run: node examples/public-status/read-once.mjs --out public-status
+      - name: New process, same task and receipt
+        run: node examples/public-status/read-once.mjs --out public-status
+      - name: Revoke original key
+        run: node examples/public-status/read-once.mjs --out public-status --revoke
+      - name: A later process remains denied
+        run: |
+          set +e
+          node examples/public-status/read-once.mjs --out public-status
+          result=$?
+          set -e
+          test "$result" -eq 3
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sanitized-public-status-receipts
+          path: |
+            public-status/receipt-*.json
+            public-status/revocation-*.json
+            public-status/denial-*.json
+          if-no-files-found: error

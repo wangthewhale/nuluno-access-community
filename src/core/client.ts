@@ -1,3 +1,4 @@
+import {ACCESS_VERSION} from '../version';
 import type {AccessSubmit,AccessSafeTask} from './types';
 /** Portable HTTPS client. Access keys are held in transport memory only.
  * No automatic retry can repeat a possibly dispatched provider operation.
@@ -13,12 +14,14 @@ export class AccessTransportError extends Error {
   readonly code: string;
   readonly status: number | null;
   readonly reconcileOnly: boolean;
-  constructor(code: string, status: number | null, reconcileOnly = false) {
+  readonly requiresOwnerAuthorization: boolean;
+  constructor(code: string, status: number | null, reconcileOnly = false, requiresOwnerAuthorization = false) {
     super(code);
     this.name = 'AccessTransportError';
     this.code = code;
     this.status = status;
     this.reconcileOnly = reconcileOnly;
+    this.requiresOwnerAuthorization = requiresOwnerAuthorization;
   }
 }
 
@@ -26,6 +29,71 @@ const MAX_RESPONSE = 128 * 1024;
 const MAX_REQUEST = 32 * 1024;
 const TASK_ID = /^[a-zA-Z0-9_-]{1,128}$/;
 const SAFE_ERROR = /^access_[a-z0-9_]{1,100}$/;
+const AUTH_ERRORS = new Set(['access_invalid_key','access_scope_denied','access_revoked','access_expired','access_rule_denied']);
+export const ACCESS_USER_AGENT = `Nuluno-Access-Community/${ACCESS_VERSION} (+https://access.nuluno.com)`;
+
+// Inspect only a bounded error projection. HTML pages, Ray IDs, IPs and
+// credentials are neither returned in errors nor logged by this client.
+async function responseProblem(response: Response): Promise<{code:string; authorization:boolean}|null> {
+  if (![401,403].includes(response.status)) return null;
+  const declared = response.headers.get('content-length');
+  if (declared && (!/^\d+$/.test(declared) || Number(declared) > MAX_RESPONSE)) return null;
+  const copy = response.clone(), reader = copy.body?.getReader();
+  if (!reader) return null;
+  const chunks: Uint8Array[] = []; let size = 0;
+  try {
+    for (;;) {
+      const next = await reader.read(); if (next.done) break;
+      size += next.value.byteLength;
+      if (size > MAX_RESPONSE) { void reader.cancel().catch(()=>{}); return null; }
+      chunks.push(next.value);
+    }
+  } catch { return null; }
+  finally { reader.releaseLock(); }
+  const bytes = new Uint8Array(size); let offset = 0;
+  for (const chunk of chunks) { bytes.set(chunk,offset); offset += chunk.byteLength; }
+  const text = new TextDecoder().decode(bytes);
+  const type = (response.headers.get('content-type')??'').split(';')[0].trim().toLowerCase();
+  if (response.status===403 && type==='text/plain'
+      && /cloudflare/i.test(response.headers.get('server')??'')
+      && /^\s*error(?:\s+code)?\s*[:#]?\s*1010\s*$/i.test(text)) {
+    return {code:'transport_client_identity_rejected',authorization:false};
+  }
+  if (response.status===403 && ['text/html','application/xhtml+xml'].includes(type)) {
+    const plain = text.replace(/<[^>]*>/g,' ').replace(/&nbsp;/gi,' ');
+    if ((/cloudflare/i.test(response.headers.get('server')??'') || /cloudflare/i.test(plain))
+        && /\berror(?:\s+code)?\s*[:#]?\s*1010\b/i.test(plain)) {
+      return {code:'transport_client_identity_rejected',authorization:false};
+    }
+    if (!response.headers.get('www-authenticate')
+        && (/cloudflare/i.test(response.headers.get('server')??'') || /cloudflare/i.test(plain))
+        && /attention\s+required/i.test(text) && /data-translate\s*=\s*["']block_headline["']/i.test(text)) {
+      return {code:'transport_edge_rejected',authorization:false};
+    }
+  }
+  if (type==='application/json') {
+    let value; try { value=JSON.parse(text); } catch { return null; }
+    if (value && typeof value.error==='string' && AUTH_ERRORS.has(value.error)) return {code:value.error,authorization:true};
+  }
+  return null;
+}
+
+/** Shared by the REST SDK and owner-configured stdio bridge. No retries/grants. */
+export async function fetchWithAccessIdentity(input: string|URL|Request, init: RequestInit = {},
+    fetchImpl: typeof globalThis.fetch = (input,init)=>globalThis.fetch(input,init)): Promise<Response> {
+  const headers = new Headers(input instanceof Request ? input.headers : undefined);
+  new Headers(init.headers).forEach((value,key)=>headers.set(key,value));
+  headers.set('user-agent',ACCESS_USER_AGENT);
+  const response = await fetchImpl(input,{...init,headers});
+  const problem = await responseProblem(response);
+  if (problem) {
+    await response.body?.cancel().catch(()=>{});
+    throw new AccessTransportError(problem.code,response.status,
+      !['GET','HEAD'].includes((init.method??(input instanceof Request?input.method:'GET')).toUpperCase()),problem.authorization);
+  }
+  return response;
+}
+
 
 async function boundedJson(response: Response): Promise<unknown> {
   const declared = response.headers.get('content-length');
@@ -71,7 +139,7 @@ export class NulunoAccessClient {
     if (typeof options.accessKey !== 'string' || options.accessKey.length > 4096 || !/^nla2\.[A-Za-z0-9_-]+$/.test(options.accessKey)) throw new AccessTransportError('access_invalid_key', null);
     this.#key = options.accessKey;
     this.#base = url.href.replace(/\/$/, '');
-    this.#fetch = options.fetch ?? globalThis.fetch;
+    this.#fetch = options.fetch ?? ((input,init)=>globalThis.fetch(input,init));
     this.#timeout = options.timeoutMs ?? 20_000;
     if (!Number.isSafeInteger(this.#timeout) || this.#timeout < 100 || this.#timeout > 60_000) {
       throw new AccessTransportError('access_invalid_timeout', null);
@@ -85,12 +153,13 @@ export class NulunoAccessClient {
     }
     let response: Response;
     try {
-      response = await this.#fetch(this.#base + path, {
+      response = await fetchWithAccessIdentity(this.#base + path, {
         method: body === undefined ? 'GET' : 'POST',
         headers: { authorization: 'Bearer ' + this.#key, accept: 'application/json', ...(body === undefined ? {} : { 'content-type': 'application/json' }) },
         body: encoded, redirect: 'error', credentials: 'omit', signal: AbortSignal.timeout(this.#timeout),
-      });
-    } catch {
+      },this.#fetch);
+    } catch (error) {
+      if (error instanceof AccessTransportError) throw error;
       // A timeout can happen after an authorized dispatch committed. The caller
       // must read/reconcile the SAME task; this client never retries a POST.
       throw new AccessTransportError('access_transport_unknown', null, body !== undefined);
@@ -98,7 +167,7 @@ export class NulunoAccessClient {
     let value: unknown;
     try { value = await boundedJson(response); }
     catch (error) {
-      if (error instanceof AccessTransportError) throw new AccessTransportError(error.code, error.status, body !== undefined);
+      if (error instanceof AccessTransportError) throw new AccessTransportError(error.code, error.status, body !== undefined,error.requiresOwnerAuthorization);
       throw new AccessTransportError('access_transport_unknown', response.status, body !== undefined);
     }
     if (!response.ok) {

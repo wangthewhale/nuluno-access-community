@@ -9,7 +9,7 @@ Outputs are the npm tarball, full public source ZIP, `release-manifest.json` and
 Local preparation requires Node 24+, npm, Git and tar:
 
 ```sh
-node scripts/prepare-release.mjs --version 0.1.0-alpha.1 --output /path/to/new-empty-output
+node scripts/prepare-release.mjs --version 0.1.0-alpha.2 --output /path/to/new-empty-output
 ```
 
 The version must already match `package.json` and `src/version.ts`; the output directory must be empty. Commit reviewed changes before expecting them in an artifact. A maintainer separately reviews the exact commit, package/source inventories, hashes, version and prerelease status before publishing through any channel. Commercial extensions and private owner/agent state must stay outside the artifacts.

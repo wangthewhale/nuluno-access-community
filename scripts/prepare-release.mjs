@@ -9,7 +9,7 @@ import {parseArgs} from 'node:util';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const top=new Set(['README.md','LICENSE','NOTICE','THIRD_PARTY.md','SECURITY.md','CONTRIBUTING.md','package.json','package-lock.json','Dockerfile','compose.yaml','tsconfig.json','tsconfig.build.json','.gitignore','.dockerignore','.env.example']);
-const dirs=new Set(['.github','src','tests','scripts','docs','evidence']);
+const dirs=new Set(['.github','src','tests','scripts','docs','evidence','examples']);
 const forbidden=new Set(['.git','.private','private','node_modules','state','credentials','commercial-extension']);
 const hash=data=>createHash('sha256').update(data).digest('hex');
 const git=(...args)=>execFileSync('git',args,{cwd:root});
@@ -19,6 +19,7 @@ export function safePath(name){
  const base=posix.basename(name);
  if((base.startsWith('.env')&&base!=='.env.example')||['credentials.json','authorization.json','service.json','.npmrc'].includes(base)||/\.(?:sqlite.*|db(?:-.*)?|log|tgz|zip)$/.test(base))throw Error('private_or_generated_release_file');
  if(!dirs.has(parts[0])&&!top.has(name))throw Error('unreviewed_release_root');
+ if(parts[0]==='examples'&&!['examples/public-status/README.md','examples/public-status/read-once.mjs'].includes(name))throw Error('unreviewed_example_path');
  if(name.startsWith('src/providers/')&&name!=='src/providers/mastodon.ts')throw Error('noncommunity_provider_forbidden');
  if(name.startsWith('src/extensions/')&&name!=='src/extensions/registry.ts')throw Error('noncommunity_extension_forbidden');
  return name;

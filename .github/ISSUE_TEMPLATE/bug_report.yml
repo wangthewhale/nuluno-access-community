@@ -9,7 +9,7 @@ body:
     id: version
     attributes:
       label: Community version or commit
-      placeholder: "0.1.0-alpha.1 / exact commit"
+      placeholder: "0.1.0-alpha.2 / exact commit"
     validations:
       required: true
   - type: textarea

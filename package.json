@@ -1,6 +1,6 @@
 {
   "name": "@nuluno/access-community",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "description": "Open core for scoped agent authorization, durable tasks, reconciliation and revocation",
   "type": "module",
   "engines": {
@@ -25,7 +25,8 @@
     "scripts/public-agent-fixture.mjs",
     "LICENSE",
     "NOTICE",
-    "scripts/accept-commercial-extension.mjs"
+    "scripts/accept-commercial-extension.mjs",
+    "examples/public-status"
   ],
   "scripts": {
     "dev": "tsx src/server.ts",

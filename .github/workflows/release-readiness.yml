@@ -5,7 +5,7 @@ on:
       version:
         description: Existing package.json version; this workflow does not bump it
         required: true
-        default: 0.1.0-alpha.1
+        default: 0.1.0-alpha.2
         type: string
   push:
     tags:

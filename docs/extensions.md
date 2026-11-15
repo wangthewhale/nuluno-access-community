@@ -99,3 +99,7 @@ and the vault, not extension metadata or task payloads.
 Community and commercial extension packages can have different licenses.
 Installing an extension does not relicense it or transfer platform/account rights.
 Keep each package's license and third-party notices with its distribution.
+
+## Version-bound commercial compatibility
+
+The separately licensed commercial extension 0.1.0-alpha.1 declares an exact peer on Access Community 0.1.0-alpha.1. Its retained `scripts/accept-commercial-extension.mjs` is a historical alpha.1-pair check, not acceptance for Community 0.1.0-alpha.2. Use the exact alpha.1 release pair specified in the paid delivery guide. This alpha.2 release does not change that peer requirement, package, license or acceptance record. Do not force an incompatible peer installation.
