@@ -25,6 +25,7 @@ jobs:
           node-version: '24'
       - run: npm ci --ignore-scripts
       - run: npm run typecheck
+      - run: npm run build
       - run: npm test
       - run: node --test scripts/prepare-release.test.mjs
       - name: Prepare source-bound community artifacts

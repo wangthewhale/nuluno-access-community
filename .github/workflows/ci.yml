@@ -11,8 +11,8 @@ jobs:
           cache: npm
       - run: npm ci --ignore-scripts
       - run: npm run typecheck
-      - run: npm test
       - run: npm run build
+      - run: npm test
       - run: npm pack --dry-run
       - name: Build the independent container
         run: docker build -t nuluno-access:ci .
