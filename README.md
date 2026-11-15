@@ -42,7 +42,7 @@ keys, vault key and SQLite state remain in the Git-ignored output folder.
 | A client restarts or changes transport | Reuse the same idempotency key through MCP and SDK | Same task and receipt, no new reserved provider call |
 | An agent should lose access | Add `--revoke` to the same command | Its original key is denied after another service restart |
 
-The [historical alpha.1 preflight receipt](docs/evidence/first-use-preflight-20261115.json) records the preceding operator-run macOS trial. It is retained with its original version and source hashes. It does not attest to this new combined alpha.2 code. New-version acceptance is recorded separately after execution. Public-data persistence is not an outside human trial, private-account acceptance or evidence of sales improvement.
+The [version-bound alpha.2 Linux receipt](docs/evidence/first-use-0.1.0-alpha.2-20261115.json) records the exact source commit, a real public GET, original-task/receipt reuse through MCP and SDK after restarting the service, original-key revocation and a later fresh process exiting with code 3. The [preceding preflight](docs/evidence/first-use-preflight-20261115.json) remains unchanged. These are operator-run technical checks, not an outside human trial, private-account signup/publication acceptance or sales improvement. Linux core CI also started a real container and preserved state across two restarts.
 
 ## What you can connect
 

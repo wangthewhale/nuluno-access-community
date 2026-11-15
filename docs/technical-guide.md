@@ -206,3 +206,7 @@ A second [anonymous public-clone installation](../evidence/public-clone-2026-11-
 ## Client identity and authorization
 
 The SDK identifies its actual Nuluno Community version. A confirmed Cloudflare 403 / Error 1010 is reported as `transport_client_identity_rejected` with `requiresOwnerAuthorization: false`; it is a transport identity problem. Structured invalid-key, revoked-key and scope-denial responses remain authorization failures. This classification never renews a key, expands a grant or retries a possibly dispatched POST.
+
+## Current alpha.2 execution evidence
+
+[Exact-source Linux first use](evidence/first-use-0.1.0-alpha.2-20261115.json) records the public read, same-task/receipt reuse, revocation and a later fresh-process denial. The retained commercial extension alpha.1 requires Community alpha.1; that separate paid pair is not relabelled as alpha.2 acceptance. Complete costs remain unknown and no sales improvement is claimed.
