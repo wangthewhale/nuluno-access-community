@@ -1,0 +1,123 @@
+{
+  "schema": "nuluno-one-command-public-trial-v1",
+  "product": "access",
+  "passed": true,
+  "observedAt": "2026-11-16T03:57:44.307Z",
+  "packageVersion": "0.1.0-alpha.2",
+  "sourceSnapshotSha256": "4002ed90fca023b936a0ca40da7bd3b75b38b69c9dab44913b6fed5f4f23b875",
+  "sourceFiles": 63,
+  "baseCheckoutCommit": "5d1c9f0da2e4b8802e4c86c065849b12b1c5dc3e",
+  "checkoutClean": false,
+  "bootstrapSha256": "4c49a9cbf6ab10575f03400a6f4f605b6a6aec1d5765045cfc3081519d235f33",
+  "helperSha256": "acc7c06c1c8a4d9f53f59ecbf1ab4eeb6362d6f004f9ef3fa3a9fba74fb1223b",
+  "steps": [
+    {
+      "stage": "read",
+      "expectedExit": 0,
+      "result": {
+        "schema": "nuluno-public-status-notebook-v1",
+        "passed": true,
+        "observedAt": "2026-11-16T03:57:43.644Z",
+        "packageVersion": "0.1.0-alpha.2",
+        "node": "v24.22.1",
+        "publicUrl": "https://mastodon.social/@Mastodon/117466985005297414",
+        "statusId": "117466985005297414",
+        "taskId": "c59334d4-65e7-43b5-bc46-c4e3eafc82dc",
+        "receiptHash": "fe3a4dc2af54404f1bd0fd43c506877330a5c78625a2c64be1b21c867feaf978",
+        "resumedOriginalTask": false,
+        "sameTaskAcrossMcpAndSdk": true,
+        "providerCalls": 1,
+        "providerWrites": 0,
+        "publicTextBytes": 313,
+        "publicTextSha256": "29f5169f35f53389e756f84223e99369462505ea68fffcd27750bbcabc545cad",
+        "untrustedData": true,
+        "modelCalls": 0,
+        "fullCostMicros": null,
+        "privateAccountConnected": false
+      }
+    },
+    {
+      "stage": "resume",
+      "expectedExit": 0,
+      "result": {
+        "schema": "nuluno-public-status-notebook-v1",
+        "passed": true,
+        "observedAt": "2026-11-16T03:57:43.888Z",
+        "packageVersion": "0.1.0-alpha.2",
+        "node": "v24.22.1",
+        "publicUrl": "https://mastodon.social/@Mastodon/117466985005297414",
+        "statusId": "117466985005297414",
+        "taskId": "c59334d4-65e7-43b5-bc46-c4e3eafc82dc",
+        "receiptHash": "fe3a4dc2af54404f1bd0fd43c506877330a5c78625a2c64be1b21c867feaf978",
+        "resumedOriginalTask": true,
+        "sameTaskAcrossMcpAndSdk": true,
+        "providerCalls": 1,
+        "providerWrites": 0,
+        "publicTextBytes": 313,
+        "publicTextSha256": "29f5169f35f53389e756f84223e99369462505ea68fffcd27750bbcabc545cad",
+        "untrustedData": true,
+        "modelCalls": 0,
+        "fullCostMicros": null,
+        "privateAccountConnected": false
+      }
+    },
+    {
+      "stage": "revoke",
+      "expectedExit": 0,
+      "result": {
+        "schema": "nuluno-public-status-revocation-v1",
+        "passed": true,
+        "observedAt": "2026-11-16T03:57:44.085Z",
+        "originalKeyRevoked": true,
+        "newKeyCreated": false,
+        "agentDenied": true,
+        "providerWrites": 0,
+        "fullCostMicros": null
+      }
+    },
+    {
+      "stage": "denial",
+      "expectedExit": 3,
+      "result": {
+        "schema": "nuluno-public-status-revoked-denial-v1",
+        "passed": true,
+        "observedAt": "2026-11-16T03:57:44.287Z",
+        "originalKeyRevoked": true,
+        "newKeyCreated": false,
+        "agentDenied": true,
+        "afterFreshServiceProcess": true,
+        "originalTaskId": "c59334d4-65e7-43b5-bc46-c4e3eafc82dc",
+        "originalReceiptHash": "fe3a4dc2af54404f1bd0fd43c506877330a5c78625a2c64be1b21c867feaf978",
+        "providerWrites": 0,
+        "fullCostMicros": null,
+        "readSucceeded": false
+      }
+    }
+  ],
+  "modelCalls": 0,
+  "externalProviderWrites": 0,
+  "dependencySetupNetworkCalls": null,
+  "completeCost": null,
+  "privateAccountUsed": false,
+  "existingInstallOrStateReplaced": false,
+  "temporaryPrivateConsumerRemovedAfterSuccess": true,
+  "operatorEnvironment": {
+    "platform": "macOS",
+    "architecture": "arm64",
+    "node": "24.22.1",
+    "operator": "coding-agent controlled public-data trial"
+  },
+  "replay": {
+    "schema": "nuluno-recorded-trial-replay-v1",
+    "state": "replayed_recorded_trial",
+    "historicalPassed": true,
+    "executedCurrentTrial": false,
+    "newProviderActions": 0
+  },
+  "sourceLineage": "Exact alpha2 base checkout plus this new driver. checkoutClean=false is intentional; the addon was not present in the immutable alpha2 tag. The source snapshot hash binds the actual private temporary consumer.",
+  "evidenceLimits": [
+    "Public read only; no private mailbox, OAuth consent, social write, qualified lead or sale.",
+    "One operator trial per product; not an independent customer trial, a market speed/cost comparison, or automatic model-weight learning.",
+    "Setup uses package registries and local resources; complete cost and dependency setup request count are unknown."
+  ]
+}

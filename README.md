@@ -6,6 +6,7 @@ Read one real public Mastodon status through MCP and the SDK. Restart the
 service and recover the same task. Revoke its key and verify the native denial
 after another restart.
 
+[One-command trial (Node 24)](docs/one-command-trial.md) ·
 [Try the real task](#first-run-read-one-real-public-status) ·
 [Let your agent set it up](SETUP.md) ·
 [Inspect the actual proof](docs/evidence/first-use-anonymous-alpha2-20261115.json)
