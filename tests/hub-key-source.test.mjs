@@ -40,7 +40,12 @@ test('wrong or missing operator master, source changes and wrong expected UUID n
  await assert.rejects(production.loadInstallationKeys(path,{source:'operator-env',environment:env()}),fails('key_source_original_master_changed'));
  await assert.rejects(production.loadInstallationKeys(path,{source:'operator-env',environment:{}}),fails('key_source_operator_master_required'));
  await assert.rejects(production.loadInstallationKeys(path,{source:'operator-env',environment,expectedInstallationId:randomUUID()}),fails('key_source_original_installation_required'));
- await assert.rejects(production.loadInstallationKeys(path,{source:'macos-file-keychain'}),fails('key_source_original_source_changed'));
+ // Exercise the source-identity boundary with a deterministic Darwin fixture.
+ // The real Linux runner must reject a macOS source even earlier; its
+ // platform guard is separately tested below and remains unchanged.
+ const native=nativeFixture();
+ await assert.rejects(native.load(path,{source:'macos-file-keychain'}),fails('key_source_original_source_changed'));
+ assert.equal(native.calls.length,0);
  assert.equal(await readFile(join(path,production.INSTALLATION_FILE),'utf8'),before);keys.destroy();
 });
 
