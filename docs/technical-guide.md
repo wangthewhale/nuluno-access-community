@@ -1,3 +1,5 @@
+> Historical alpha.1/alpha.2 core reference. Its version-specific installation and acceptance examples are not acceptance for the Account Hub candidate. Start with [the candidate README](../README.md) and [current Hub contract](account-hub.md).
+
 # Nuluno Access Community
 
 **Free Apache-2.0 core for scoped agent access, durable tasks and revocation.**

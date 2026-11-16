@@ -1,0 +1,6 @@
+// Controlled provider fixture only. No network, real secrets, or platform grants.
+import {createStandaloneService} from '../../dist/service.mjs';
+const s=createStandaloneService({path:process.env.CONTROLLED_SQLITE_PATH,vaultKey:process.env.CONTROLLED_VAULT_KEY,origin:'http://127.0.0.1:8892'});
+const owner=await s.repository.createTenant('controlled crash fixture'),issued=await s.broker.issue(owner.scope,{label:'controlled original',expiresAt:Date.now()+600000,rules:[{provider:'mastodon',actions:['publish_text'],accountIds:['123'],writeLimit:1}]});
+const task=await s.broker.submit(issued.key,{idempotencyKey:'controlled-crash-original',provider:'mastodon',action:'publish_text',payload:{text:'controlled'}});
+await s.broker.advance(issued.key,task.id,{provider:'mastodon',execute:async ctx=>{await ctx.external({provider:'mastodon',action:'publish_text',accountId:'123',write:true},async()=>{const state=await s.repository.read(owner.scope),dispatch=state.tasks[task.id].dispatches[0];process.send({status:'admitted',scope:owner.scope,key:issued.key,keyId:issued.grant.id,taskId:task.id,dispatchId:dispatch.id,callId:Object.keys(dispatch.calls)[0]});await new Promise(()=>{});});return {kind:'unknown'};},reconcile:async()=>({kind:'unknown'})});

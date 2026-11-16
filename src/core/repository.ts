@@ -40,7 +40,18 @@ export class StandaloneRepository implements AccessRepository{
  async setConnection(scope:AccessScope,value:Connection){await this.atomic(()=>{this.row(scope);this.db.prepare('INSERT INTO connections VALUES(?,?,?,?,?,?,?) ON CONFLICT(tenant_id,provider,account_id) DO UPDATE SET label=excluded.label,scopes=excluded.scopes,encrypted=excluded.encrypted,expires_at=excluded.expires_at').run(scope.workspaceId,value.provider,value.accountId,value.label,JSON.stringify(value.scopes),JSON.stringify(this.vault.encrypt(JSON.stringify(value.secret),'connection:'+scope.workspaceId+':'+value.provider+':'+value.accountId)),value.expiresAt);});}
  connection(scope:AccessScope,provider:string,id:string):Connection{this.row(scope);const r=this.db.prepare('SELECT * FROM connections WHERE tenant_id=? AND provider=? AND account_id=?').get(scope.workspaceId,provider,id) as any;if(!r)throw new AccessError('access_provider_unavailable');return {provider,accountId:id,label:r.label,scopes:JSON.parse(r.scopes),secret:JSON.parse(this.vault.decrypt(JSON.parse(r.encrypted),'connection:'+scope.workspaceId+':'+provider+':'+id)),expiresAt:r.expires_at};}
  async connections(scope:AccessScope){this.row(scope);return this.db.prepare('SELECT provider,account_id AS accountId,label,scopes,expires_at AS expiresAt FROM connections WHERE tenant_id=?').all(scope.workspaceId).map((r:any)=>({...r,connected:true,scopes:JSON.parse(r.scopes)}));}
- async disconnect(scope:AccessScope,provider:string,account:string){await this.atomic(()=>{this.row(scope);this.db.prepare('DELETE FROM connections WHERE tenant_id=? AND provider=? AND account_id=?').run(scope.workspaceId,provider,account);});}
+ async disconnect(scope:AccessScope,provider:string,account:string){await this.atomic(async()=>{
+  this.row(scope);
+  const revoked=await this.transact(scope,state=>{const ids:string[]=[];for(const grant of Object.values(state.grants)){
+   const depends=grant.rules.some(rule=>rule.provider===provider&&rule.accountIds.includes(account)&&!(provider==='mastodon'&&account==='public:mastodon.social'&&rule.actions.length>0&&rule.actions.every(action=>action==='read_public_status')));
+   if(!depends)continue;
+   // Revoke the whole original capability; never split rules or reset quota.
+   if(grant.revokedAt===null){grant.revokedAt=Date.now();grant.revision++;}ids.push(grant.id);
+   for(const task of Object.values(state.tasks))if(task.keyId===grant.id&&!['succeeded','failed'].includes(task.status)){task.status='revoked';delete task.handoff;delete task.waitReason;}
+  }return ids;});
+  this.db.prepare('DELETE FROM connections WHERE tenant_id=? AND provider=? AND account_id=?').run(scope.workspaceId,provider,account);
+  for(const id of revoked)await this.retireManaged(scope,id);
+ });}
  async saveOAuth(state:string,scope:AccessScope,provider:string,value:unknown){await this.atomic(()=>{this.row(scope);this.db.prepare('INSERT INTO oauth VALUES(?,?,?,?,?,?)').run(accessDigest(state),scope.workspaceId,provider,JSON.stringify(this.vault.encrypt(JSON.stringify(value),'oauth:'+accessDigest(state))),Date.now()+600000,'pending');});}
  async claimOAuth(state:string,provider:string){return this.atomic(()=>{const r=this.db.prepare('SELECT * FROM oauth WHERE state_hash=? AND provider=?').get(accessDigest(state),provider) as any;if(!r||r.expires_at<Date.now()||r.phase!=='pending')throw new AccessError('access_verification_rejected');this.db.prepare("UPDATE oauth SET phase='exchanging' WHERE state_hash=?").run(accessDigest(state));return {scope:awaitableScope(r),value:JSON.parse(this.vault.decrypt(JSON.parse(r.encrypted),'oauth:'+accessDigest(state)))};function awaitableScope(r:any){return r.tenant_id as string;}});}
  async completeOAuth(state:string){await this.atomic(()=>this.db.prepare("UPDATE oauth SET phase='complete',encrypted='' WHERE state_hash=? AND phase='exchanging'").run(accessDigest(state)));}

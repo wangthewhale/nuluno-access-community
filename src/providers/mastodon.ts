@@ -22,9 +22,20 @@ export async function nativeJson(path:string,options:RequestInit={},token?:strin
 export class MastodonProvider implements AccessProviderAdapter{
  readonly provider='mastodon';constructor(private repository:StandaloneRepository){}
  private async readback(ctx:AccessAdapterContext,statusId:string,text:string,token:string):Promise<AccessStepResult>{
-  const original=await ctx.external({provider:'mastodon',action:'publish_text',accountId:ctx.task.accountId,write:false},async()=>({status:await nativeJson('/api/v1/statuses/'+statusId,{},token),source:await nativeJson('/api/v1/statuses/'+statusId+'/source',{},token)}));
-  if(original.status.id!==statusId||original.status.account?.id!==ctx.task.accountId||original.source.id!==statusId||original.source.text!==text)return {kind:'unknown'};
-  const u=new URL(original.status.url);if(u.protocol!=='https:'||u.hostname!=='mastodon.social'||u.username||u.password)throw new AccessError('access_verification_rejected');
+  const cursor={...ctx.task.cursor,phase:'published',postId:statusId};
+  let status:any,source:any;
+  try{
+   // Each HTTP request needs a fresh admission and its own dispatch call.
+   status=await ctx.external({provider:'mastodon',action:'publish_text',accountId:ctx.task.accountId,write:false},()=>nativeJson('/api/v1/statuses/'+statusId,{},token));
+   if(status.id!==statusId||status.account?.id!==ctx.task.accountId)return {kind:'unknown',cursor};
+   source=await ctx.external({provider:'mastodon',action:'publish_text',accountId:ctx.task.accountId,write:false},()=>nativeJson('/api/v1/statuses/'+statusId+'/source',{},token));
+  }catch{
+   // A stopped follow-up is not permission to retry a write. Keep the known
+   // native post ID even when the grant/lease ended during the first read.
+   return {kind:'unknown',cursor};
+  }
+  if(source.id!==statusId||source.text!==text)return {kind:'unknown',cursor};
+  const u=new URL(status.url);if(u.protocol!=='https:'||u.hostname!=='mastodon.social'||u.username||u.password)throw new AccessError('access_verification_rejected');
   return {kind:'completed',cursor:{phase:'verified',postId:statusId},evidence:{sourceKind:'native_provider',resourceId:statusId,publicUrl:u.href,receiptHash:accessDigest({provider:'mastodon',accountId:ctx.task.accountId,statusId,textHash:createHash('sha256').update(text).digest('hex')}),verifiedAt:Date.now()}};
  }
  async execute(ctx:AccessAdapterContext):Promise<AccessStepResult>{

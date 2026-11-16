@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>你的帳號 · Nuluno Access</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/owner-start.mjs"></script>
+</head>
+<body>
+  <header class="topbar"><a class="wordmark" href="/" aria-label="Nuluno Access 首頁"><span class="brand-mark" aria-hidden="true">n</span>Nuluno <span>Access</span></a><span class="preview-label">本機單人安裝 · 候選版</span></header>
+  <main>
+    <div class="intro"><p class="eyebrow">你的帳號</p><h1>把需要的帳號連接好。</h1><p class="lead">已連接的會記住，不用每次重新授權。<br class="desktop-break">平台需要你再次確認時，我們會清楚告訴你。</p></div>
+    <section class="project-bar" aria-label="目前專案"><span class="project-icon" aria-hidden="true">◻</span><div><span class="small-label">目前專案</span><strong id="project-label">正在讀取…</strong></div><button id="refresh" class="text-button" type="button">重新整理</button></section>
+    <p id="feedback" class="feedback" role="status" aria-live="polite">正在確認已連接的帳號…</p>
+    <section class="accounts" aria-label="帳號連接">
+      <article class="account-card" aria-labelledby="gmail-title">
+        <div class="card-heading"><span class="provider-icon gmail-icon" aria-hidden="true">M</span><div><h2 id="gmail-title">Email</h2><p>Gmail</p></div><span id="gmail-badge" class="badge neutral">讀取中</span></div>
+        <p class="description">連接 Gmail 並保存授權，之後沿用。</p><p id="gmail-account" class="account-label" hidden></p><p id="gmail-note" class="provider-note">正在確認連接狀態。</p>
+        <div class="card-actions"><button id="gmail-connect" class="primary-button" type="button" disabled>連接 Gmail</button><button id="gmail-disconnect" class="secondary-button" type="button" hidden>解除連接</button></div>
+      </article>
+      <article class="account-card" aria-labelledby="mastodon-title">
+        <div class="card-heading"><span class="provider-icon mastodon-icon" aria-hidden="true">m</span><div><h2 id="mastodon-title">社群</h2><p>Mastodon</p></div><span id="mastodon-badge" class="badge neutral">讀取中</span></div>
+        <p class="description">連接你的 Mastodon 帳號，供之後授權的社群工作使用。</p><p id="mastodon-account" class="account-label" hidden></p><p id="mastodon-note" class="provider-note">正在確認連接狀態。</p>
+        <div class="card-actions"><button id="mastodon-connect" class="primary-button" type="button" disabled>連接 Mastodon</button><button id="mastodon-disconnect" class="secondary-button" type="button" hidden>解除連接</button></div>
+      </article>
+      <article class="account-card payment-card" aria-labelledby="payment-title">
+        <div class="card-heading"><span class="provider-icon payment-icon" aria-hidden="true">↗</span><div><h2 id="payment-title">付款</h2><p>付款帳號</p></div><span class="badge neutral">尚未支援</span></div>
+        <p class="description">這個預覽尚未提供付款授權或代為付款。</p><p id="payment-note" class="provider-note">目前不會收取卡號，也不會進行扣款。</p><div class="card-actions"><button class="secondary-button" type="button" disabled>尚未開放</button></div>
+      </article>
+    </section>
+<section class="agent-panel" aria-labelledby="agents-title"><div class="agent-heading"><div><p class="eyebrow">連接 AI agent</p><h2 id="agents-title">先使用公開資料試用。</h2></div><button id="refresh-agents" class="text-button" type="button">更新列表</button></div><p class="description">這個連接只能讀取 mastodon.social 的公開貼文。不能發文、讀私人信箱或付款；一小時後到期，最多 25 項任務。</p><button id="create-public-agent" class="primary-button" type="button" disabled>建立公共只讀連接</button><p id="agent-feedback" class="provider-note" role="status" aria-live="polite">正在確認本人授權…</p><div id="agent-list"></div><details class="agent-help"><summary>下載後如何使用？</summary><p>連接檔案提供標準 MCP Streamable HTTP 端點與這個 agent 的短效授權，並非平台密碼。適合官方 MCP SDK；其他 agent 請依各自的設定格式填入，並非所有工具都能直接匯入同一份 JSON。請保密保存檔案。</p></details></section>
+    <section class="remember-panel"><label class="checkbox-label"><input id="remember-device" type="checkbox" disabled><span>在這台裝置記住目前專案</span></label><p>只記住這個專案的選擇；不是 Nuluno 雲端登入。</p></section>
+    <section id="return-panel" class="return-panel" hidden><div><h2>繼續原本的工作</h2><p id="return-label">你的工作會保留，不用重新交代。</p></div><a id="return-link" class="primary-button" hidden>回到工作</a></section>
+    <p class="storage-note"><span aria-hidden="true">✓</span> 連接資訊由這個本機服務保存，可隨時解除。授權期間與可做的事，仍依你交付的範圍。</p>
+    <details class="advanced"><summary>進階設定與本機狀態</summary><p>這個頁面是獨立、本機的連接預覽，沒有替正式產品完成登入。此預覽只提供帳號授權與保存；實際驗證信處理仍須另外接上商用執行服務。</p><dl><div><dt>運行位置</dt><dd id="advanced-mode">確認中</dd></div><div><dt>連接保存</dt><dd id="advanced-vault">確認中</dd></div><div><dt>Google 連接設定</dt><dd id="advanced-google">確認中</dd></div><div><dt>Google 回到此服務的位置</dt><dd id="advanced-callback" class="technical-value">確認中</dd></div><div><dt>正式產品登入</dt><dd id="advanced-login">尚未完成</dd></div></dl><p class="advanced-note">這裡不需要輸入平台密碼、付款卡號或管理金鑰。</p><button id="device-signout" type="button" class="secondary-button">登出這台裝置</button></details>
+  </main>
+  <footer><span>Nuluno Access</span><span>先連接，再接續。</span></footer>
+</body>
+</html>

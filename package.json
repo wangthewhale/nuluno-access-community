@@ -1,13 +1,14 @@
 {
   "name": "@nuluno/access-community",
-  "version": "0.1.0-alpha.2",
-  "description": "Open core for scoped agent authorization, durable tasks, reconciliation and revocation",
+  "version": "0.1.0-alpha.3-hub.1",
+  "description": "Apache community core with a portable owner-paired account hub (candidate)",
   "type": "module",
   "engines": {
     "node": ">=24"
   },
   "bin": {
-    "nuluno-access-community": "dist/server.mjs"
+    "nuluno-access-community": "dist/server.mjs",
+    "nuluno-access-hub": "dist/account-hub/cli.mjs"
   },
   "files": [
     "dist",
@@ -25,32 +26,35 @@
     "scripts/public-agent-fixture.mjs",
     "LICENSE",
     "NOTICE",
-    "scripts/accept-commercial-extension.mjs",
-    "examples/public-status"
+    "examples/public-status",
+    "scripts/install-account-hub.mjs",
+    "scripts/accept-portable-hub.mjs",
+    "scripts/build.mjs"
   ],
   "scripts": {
-    "dev": "tsx src/server.ts",
-    "build": "esbuild src/server.ts src/service.ts src/core/client.ts src/core/types.ts src/extensions/registry.ts src/host-ports.ts --bundle --platform=node --target=node24 --format=esm --packages=external --outdir=dist --out-extension:.js=.mjs --banner:js='#!/usr/bin/env node' && tsc -p tsconfig.build.json",
+    "dev": "tsx src/cli.ts",
+    "build": "node scripts/build.mjs",
     "start": "node dist/server.mjs",
-    "test": "tsx --test tests/*.test.ts",
+    "test": "tsx --test tests/*.test.ts && node --test tests/hub-*.test.mjs",
     "typecheck": "tsc --noEmit",
     "prepare": "npm run build",
     "demo:public": "node scripts/demo-public-read.mjs",
-    "demo:recovery": "node scripts/demo-write-recovery.mjs"
+    "demo:recovery": "node scripts/demo-write-recovery.mjs",
+    "hub": "node dist/account-hub/cli.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/client": "2.4.0",
-    "@modelcontextprotocol/node": "^2.1.2",
-    "@modelcontextprotocol/server": "^2.4.0",
-    "express": "^5.1.0",
-    "zod": "^4.6.7"
+    "@modelcontextprotocol/node": "2.1.2",
+    "@modelcontextprotocol/server": "2.4.0",
+    "express": "5.3.0",
+    "zod": "4.6.7"
   },
   "devDependencies": {
-    "@types/express": "^5.0.3",
-    "@types/node": "^24.3.0",
-    "esbuild": "^0.25.9",
-    "tsx": "^4.20.5",
-    "typescript": "^5.9.2"
+    "@types/express": "5.0.6",
+    "@types/node": "24.19.2",
+    "esbuild": "0.25.12",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
   },
   "exports": {
     ".": {
@@ -77,6 +81,21 @@
       "types": "./dist/host-ports.d.ts",
       "import": "./dist/host-ports.mjs",
       "default": "./dist/host-ports.mjs"
+    },
+    "./account-hub": {
+      "types": "./dist/account-hub/server.d.ts",
+      "import": "./dist/account-hub/server.mjs",
+      "default": "./dist/account-hub/server.mjs"
+    },
+    "./app": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/app.mjs",
+      "default": "./dist/app.mjs"
+    },
+    "./installation-keys": {
+      "types": "./dist/account-hub/keys/src/key-source.d.mts",
+      "import": "./dist/account-hub/keys/src/key-source.mjs",
+      "default": "./dist/account-hub/keys/src/key-source.mjs"
     }
   },
   "license": "Apache-2.0"

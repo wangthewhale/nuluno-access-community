@@ -1,8 +1,5 @@
 import express,{type Request,type Response,type NextFunction} from 'express';
 import {randomBytes,createHash,timingSafeEqual} from 'node:crypto';
-import {writeFileSync,existsSync,realpathSync,readFileSync} from 'node:fs';
-import {resolve} from 'node:path';
-import {pathToFileURL} from 'node:url';
 import {z} from 'zod';
 import {createStandaloneService,type InstalledExtension} from './service';
 import {createAccessMcpNodeHandler} from './core/mcp';
@@ -11,7 +8,6 @@ import {AccessError,type AccessScope} from './core/types';
 import {nativeJson,MASTODON_ORIGIN,PUBLIC_MASTODON_ACCOUNT} from './providers/mastodon';
 import {setupHtml,setupScript} from './setup-ui';
 import {COST_CATEGORIES} from './observability';
-import {loadAccessExtensions} from './extensions/registry';
 export function createAccessApp(options:{path:string;vaultKey:string;adminKey:string;origin:string;extensions?:readonly InstalledExtension[]}){
  if(options.adminKey.length<32||options.vaultKey.length<32||options.adminKey===options.vaultKey)throw new Error('independent_secrets_required');
  const u=new URL(options.origin);if(u.username||u.password||u.pathname!=='/'||u.search||u.hash||u.protocol!=='https:'&&!(u.protocol==='http:'&&['127.0.0.1','localhost','[::1]'].includes(u.hostname)))throw new Error('https_origin_or_loopback_required');
@@ -51,12 +47,3 @@ export function createAccessApp(options:{path:string;vaultKey:string;adminKey:st
  app.use((error:unknown,_req:Request,res:Response,_next:NextFunction)=>{sendAccessFailure(res,error);});
  return {app,service};
 }
-async function main(){
- if(process.argv[2]==='init'){const dest=resolve(process.argv[3]??'.env');if(existsSync(dest))throw new Error('configuration_already_exists');const values='PORT=8892\nHOST=127.0.0.1\nNULUNO_ACCESS_ORIGIN=http://localhost:8892\nNULUNO_ACCESS_STATE=./state/access.sqlite\nNULUNO_ACCESS_ADMIN_KEY='+randomBytes(32).toString('hex')+'\nNULUNO_ACCESS_VAULT_KEY='+randomBytes(32).toString('hex')+'\n';writeFileSync(dest,values,{mode:0o600,flag:'wx'});process.stderr.write('Private configuration created. Load it only in this service process; keep it out of Git.\n');return;}
- const port=Number(process.env.PORT??8892),origin=process.env.NULUNO_ACCESS_ORIGIN??'http://localhost:'+port;
- const extensionPath=process.env.NULUNO_ACCESS_EXTENSIONS_CONFIG;
- const extensions=extensionPath?await loadAccessExtensions(JSON.parse(readFileSync(extensionPath,'utf8')),{resolveFrom:resolve(extensionPath)}):[];
- const {app,service}=createAccessApp({path:process.env.NULUNO_ACCESS_STATE??'./state/access.sqlite',vaultKey:process.env.NULUNO_ACCESS_VAULT_KEY??'',adminKey:process.env.NULUNO_ACCESS_ADMIN_KEY??'',origin,extensions:extensions as readonly InstalledExtension[]});const server=app.listen(port,process.env.HOST??'127.0.0.1',()=>process.stderr.write('Nuluno Access Community listening at '+origin+'\n'));
- const stop=()=>server.close(()=>{service.close();process.exit(0);});process.on('SIGTERM',stop);process.on('SIGINT',stop);
-}
-if(process.argv[1]&&import.meta.url===pathToFileURL(realpathSync(process.argv[1])).href)main().catch(()=>{process.stderr.write('Nuluno Access startup failed; check private configuration and state.\n');process.exitCode=1;});

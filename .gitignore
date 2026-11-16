@@ -9,3 +9,8 @@ state/
 *.sqlite*
 credentials*.json
 coverage/
+
+src/account-hub/keys/native/bin/
+src/account-hub/keys/native/helper-manifest.json
+.local-state/
+*.pairing-link

@@ -86,3 +86,13 @@ fixture is controlled and must remain labelled as such. Full Access 0.4.x/beta
 proof is not community, Claude, Windows, Linux or commercial-extension acceptance.
 There is no exactly-once provider-execution, universal-agent, zero-human,
 continuous-goal, economic-improvement or production-scale guarantee.
+# Account Hub candidate boundary
+
+This candidate adds short-lived owner activation and cookie plus an origin-scoped access proof. It is not two-factor authentication. Public pages are static shells; owner state and mutations require both proofs, while scoped MCP agent keys remain a separate authority. Logout and agent-key revocation persist in SQLite. A copied cookie from another localhost port alone is insufficient.
+
+Only the owner proof uses browser storage. OAuth material, pairing tokens, platform credentials and agent keys are excluded. Same-origin script compromise can still access that proof. Pinned extensions are trusted host code, not a sandbox, and entry hashes do not authenticate every transitive dependency.
+
+The master uses a dedicated macOS file-keychain item or an explicitly injected operator secret. There is no plaintext fallback beside the database. This does not make the entire host secure against its owner, malware, compromised browsers or full terminal access. It is not a KMS or a multi-tenant cloud login. The Swift source is shipped; machine-specific binaries/manifests are built and pinned locally, never silently substituted. Actual OS consent, locks and signing upgrades can require the owner.
+
+Report security issues to support@nuluno.com. No response-time SLA is promised. Do not send passwords, tokens, raw mail, activation links, owner proofs or downloaded agent connection files.
+

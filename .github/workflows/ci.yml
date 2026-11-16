@@ -18,3 +18,34 @@ jobs:
         run: docker build -t nuluno-access:ci .
       - name: Start MCP and verify durable revocation in the real container
         run: node scripts/cloud-container-smoke.mjs
+
+      - name: Install packaged Hub and run one real public MCP task
+        run: |
+          node --input-type=module <<'JS'
+          import {mkdtemp,writeFile,readFile,rm} from 'node:fs/promises';
+          import {tmpdir} from 'node:os';
+          import {join,resolve} from 'node:path';
+          import {spawnSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          const root=process.cwd(),consumer=await mkdtemp(join(tmpdir(),'nuluno-ci-hub-')),output=resolve('hub-real-consumer.json');
+          const run=(command,args,cwd)=>{const r=spawnSync(command,args,{cwd,encoding:'utf8',timeout:180000,maxBuffer:4*1024*1024});if(r.status!==0)throw Error((r.stderr||r.stdout||'consumer check failed').slice(-3000));return r.stdout;};
+          try{
+            const packed=JSON.parse(run('npm',['pack','--json','--pack-destination',consumer],root))[0];
+            if(!/^[A-Za-z0-9._-]+\.tgz$/.test(packed.filename))throw Error('unexpected package filename');
+            const archive=join(consumer,packed.filename);
+            await writeFile(join(consumer,'package.json'),JSON.stringify({name:'nuluno-real-public-consumer',private:true,type:'module'}));
+            run('npm',['install','--no-audit','--no-fund',archive],consumer);
+            run(process.execPath,[join(consumer,'node_modules/@nuluno/access-community/scripts/accept-portable-hub.mjs'),'--installation',consumer,'--output',output],consumer);
+            const receipt=JSON.parse(await readFile(output,'utf8'));
+            receipt.packageArchiveSha256=createHash('sha256').update(await readFile(archive)).digest('hex');
+            receipt.sourceCommit=process.env.GITHUB_SHA;receipt.normalConsumerInstall=true;
+            await writeFile(output,JSON.stringify(receipt,null,2)+'\n');
+          }finally{await rm(consumer,{recursive:true,force:true});}
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: access-hub-real-consumer-${{ github.sha }}
+          path: hub-real-consumer.json
+          if-no-files-found: warn
+          retention-days: 14

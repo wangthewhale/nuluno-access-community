@@ -1,3 +1,5 @@
+> Historical alpha.1/alpha.2 core reference. Its version-specific installation and acceptance examples are not acceptance for the Account Hub candidate. Start with [the candidate README](../README.md) and [current Hub contract](account-hub.md).
+
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # Operator-installed provider extensions
 

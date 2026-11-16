@@ -1,110 +1,75 @@
-# Nuluno Access Community
+# Nuluno Access Community — Account Hub candidate
 
-**Keep provider credentials in Access. Give agents limited keys.**
+Connect accounts once. Give an AI agent a narrow permission. Keep the task and receipt through a restart. Revoke that permission when you are done.
 
-Read one real public Mastodon status through MCP and the SDK. Restart the
-service and recover the same task. Revoke its key and verify the native denial
-after another restart.
+**Candidate `0.1.0-alpha.3-hub.1`.** This source addon builds on the Apache-2.0 community core. It does not replace the published, immutable alpha.2 release. It is a local, single-owner installation, not a hosted membership system or a promise of autonomous sales.
 
-[One-command trial (Node 24)](docs/one-command-trial.md) ·
-[Try the real task](#first-run-read-one-real-public-status) ·
-[Let your agent set it up](SETUP.md) ·
-[Inspect the 2026-11-15 proof](docs/evidence/first-use-anonymous-alpha2-20261115.json) ·
-[Anonymous run of published source (2026-11-16)](docs/evidence/one-command-published-20261116.json)
+## Try from this source checkout
 
-![Recorded Access public read, same task across processes and persistent revoked-key denial](docs/images/first-use-proof.svg)
-
-*Recorded 2026-11-15 · macOS/arm64 · operator run.*
-
-## Tell your agent
-
-```text
-Use Nuluno Access. Read https://raw.githubusercontent.com/wangthewhale/nuluno-access-community/main/SETUP.md
-and run its real
-public-status first-use task. Show the original task, receipt and native
-revocation proof. Keep owner/provider credentials out of prompts and output.
-```
-
-The independent Apache-2.0 core provides account/action-scoped keys, an encrypted
-vault, durable tasks, MCP, REST and a JavaScript SDK. This public trial needs no
-private account connection or model API key. Tenant and account boundaries
-remain in force; one user's authorization is not authority over every mailbox.
-
-## First run: read one real public status
-
-Requires **Node 24+**. This example needs no Nuluno account, model API key or
-social login. Use a new source checkout:
+Requires Node 24 or newer. There is no dependency on Nuluno.com, another source directory, or another agent's platform credentials.
 
 ```sh
-git clone https://github.com/wangthewhale/nuluno-access-community.git
-cd nuluno-access-community
-npm ci --ignore-scripts
-npm run build
-node examples/public-status/read-once.mjs --out my-public-status
+npm ci
+npm run hub -- --state "$HOME/.local/share/nuluno/access-hub"
 ```
 
-Open **`my-public-status/status.md`**. It contains a real public Mastodon status
-with its URL and original task/receipt IDs. The service creates a zero-write key
-for exactly that public provider, then uses the official MCP client and SDK.
-Public text is bounded and labelled as untrusted data.
+On macOS, the installer uses the dedicated **macOS file-keychain** source. If the helper has not been built, the CLI builds the included Swift source and its local SHA-256 manifest before requesting a key. Apple Command Line Tools are required. A locked keychain or an OS consent request can require you. There is no plaintext master-key fallback.
 
-Run the last command again. A new service process returns the same original
-task and receipt with one provider call reserved. Private owner keys, agent
-keys, vault key and SQLite state remain in the Git-ignored output folder.
-[Commands and recovery details](examples/public-status/README.md).
+The CLI shows a private, five-minute, one-use activation link in your terminal. Open it yourself. The link is removed from the address bar before a request is made. After activation, the browser remembers its own access proof; the service receives an HttpOnly session cookie. Choose “在這台裝置記住目前專案” to retain access across browser restarts. This is local device access, not a cloud login.
 
-## Three things to try
+If you lose browser access, run the same CLI with `pair` and the same state directory. Its dedicated `/account-hub/activate` page works even if an older cookie remains. You do not need to clear cookies or reconnect a platform.
 
-| Situation | Useful action | What you can verify |
-|---|---|---|
-| An agent needs a public social source | Save one status into a local notebook | Native public data, bounded text and a source receipt |
-| A client restarts or changes transport | Reuse the same idempotency key through MCP and SDK | Same task and receipt, no new reserved provider call |
-| An agent should lose access | Add `--revoke` to the same command | Its original key is denied after another service restart |
+```sh
+nuluno-access-hub pair --state "$HOME/.local/share/nuluno/access-hub"
+```
 
-The [version-bound alpha.2 Linux receipt](docs/evidence/first-use-0.1.0-alpha.2-20261115.json) records the exact source commit, a real public GET, original-task/receipt reuse through MCP and SDK after restarting the service, original-key revocation and a later fresh process exiting with code 3. The [preceding preflight](docs/evidence/first-use-preflight-20261115.json) remains unchanged. These are operator-run technical checks, not an outside human trial, private-account signup/publication acceptance or sales improvement. Linux core CI also started a real container and preserved state across two restarts.
+For a headless/operator installation, inject a persistent, private `NULUNO_ACCESS_MASTER_KEY` from your secret manager: exactly 32 random bytes in canonical base64url form. Explicitly select `--key-source operator-env` and use `--pairing-file /private/new-owner.pairing-link`. That file is created once with mode 0600; open its link privately and remove it after use. Do not put the master or activation link in chat, Git, logs, or a shared shell history. Losing or changing the original master fails closed; it never silently resets the installation.
 
-## What you can connect
+## Connect an AI agent
 
-| Included in this community core | Separate commercial extension |
-|---|---|
-| Scoped keys, quotas, expiry, revocation and encrypted vault | Gmail verification reader/consumer |
-| Durable tasks and uncertain-write reconciliation | Account-signup pipeline |
-| MCP, REST and JavaScript SDK | Threads connector |
-| Public Mastodon reads; official OAuth and bounded posting for an existing Mastodon account | Other advanced connectors when installed and authorized |
+1. Activate your device and open the Account Hub.
+2. Press **建立公共只讀連接**. The preset permits only public Mastodon status reads for one hour, at most 25 tasks, with zero writes. It grants no inbox, login, publication, payment, or owner access.
+3. Press **下載 MCP 連接資料**. This explicitly downloads the agent's restricted key, endpoint and Authorization header. It is not a platform password or a universal configuration file for every agent.
+4. Use those values in a client that supports MCP Streamable HTTP. The official MCP SDK accepts this connection data:
 
-The community core and public trial are free.
-[Compare the free core and paid advanced extension](https://access.nuluno.com/?lang=en).
-The extension is optional; a purchase does not supply provider consent.
+```js
+import { Client, StreamableHTTPClientTransport } from '@modelcontextprotocol/client';
+const client = new Client({ name: 'my-agent', version: '1' });
+await client.connect(new StreamableHTTPClientTransport(new URL(connection.url), {
+  requestInit: { headers: connection.headers }
+}));
+// Call read_public_status with a stable idempotencyKey. Reuse it on retry.
+```
 
-Connecting a private existing account still requires the owner's official
-consent. An extension or paid license does not supply that consent. CAPTCHA and
-provider-required identity steps keep an explicit handoff. No universal login
-bypass or uninterrupted private workflow is promised.
+5. Press **撤銷連接** to deny that same key in HTTP and MCP. Original tasks and receipts remain. Downloads contain a short-lived credential: keep them private. Other hosts, including Codex and Claude, have their own connection configuration formats; adapt the endpoint and header to the host's documented format.
 
-This is **`@nuluno/access-community` 0.1.0-alpha.2**, an independent,
-single-instance SQLite service. Public remote deployment needs HTTPS, retained
-state and the original vault key. The package name does not imply an npm
-registry release or a managed cloud subscription. Full Access releases retain
-their own license and evidence.
+## What is included
 
-## Connect your agent and keep control
+- The working community broker, scoped keys, encrypted credential vault, durable SQLite tasks, reconciliation, receipts, revocation, REST/MCP and SDK.
+- Existing-account Mastodon OAuth and the free Mastodon adapter. A real platform authorization still needs its official first consent. This candidate does not claim a live private-account OAuth acceptance.
+- A Traditional Chinese Account Hub with explicit owner activation, remembered connections, device preference, cancellation and agent connection controls.
+- Each physical platform request is admitted separately. Slow provider I/O does not hold the SQLite transaction, so revocation can commit while a request is in flight. Late safe receipts stay on the original revoked task; no follow-up request is admitted after revocation.
+- Disconnecting an account atomically retires its dependent keys and managed work. Public-only and unrelated-account keys remain separate; reconnecting does not revive the old permission or reset its quota.
+- Atomic per-project/provider OAuth admission. Cancellation retires pending/exchanging state; a late start or callback cannot restore the canceled connection.
+- Cookie plus an origin-scoped browser proof for owner APIs. A copied localhost cookie alone cannot read state or obtain CSRF. These are access proofs, **not two-factor authentication**.
 
-The core exposes `/.well-known/nuluno-access.json` and `/mcp`, with an optional
-stdio bridge. Each agent receives its own limited Bearer key, not the deployment
-owner key or provider token. Follow the [setup and SDK guide](docs/technical-guide.md)
-to use a persistent service or connect your existing Mastodon account.
+## What is deliberately unavailable
 
-Revocation blocks future access; it cannot unsend a request or erase data an
-agent already received. Complete costs remain unknown where bills are missing.
-No fixed savings, sales lift or universal client compatibility is claimed.
+**Gmail is disabled in free core.** Google appears as available only when an operator installs a compatible commercial extension through the original pinned registry and supplies that extension's own Google client configuration. No private Google connector code is shipped here. The existing alpha.2 commercial extension has an exact alpha.2 peer dependency and is **not accepted as compatible with this candidate**. No `--force` or `--legacy-peer-deps` workaround is supported. A compatible extension release and its real private flow require separate acceptance.
 
-If your first task fails, open a [first-run issue](https://github.com/wangthewhale/nuluno-access-community/issues/new/choose)
-with runtime versions and a sanitized receipt. Never attach state folders,
-keys, inbox contents or customer data. The example sends no telemetry.
+Payment, automatic account signup, private mail verification consumption, social-write onboarding and cloud membership are not enabled by the Hub. Installing it does not prove sales, savings or completed private tasks. See [extensions](docs/account-hub.md) and [security](SECURITY.md).
 
-[Technical guide](docs/technical-guide.md) · [Extension contract](docs/extensions.md) ·
-[Security](SECURITY.md) · [Contributing](CONTRIBUTING.md) · [License](LICENSE)
+## Build, tests and reproducible consumer check
 
-## Client identity and authorization
+```sh
+npm run typecheck
+npm test
+npm run build
+npm pack
+```
 
-The SDK identifies its actual Nuluno Community version. A confirmed Cloudflare 403 / Error 1010 is reported as `transport_client_identity_rejected` with `requiresOwnerAuthorization: false`; it is a transport identity problem. Structured invalid-key, revoked-key and scope-denial responses remain authorization failures. This classification never renews a key, expands a grant or retries a possibly dispatched POST.
+Install the resulting candidate tarball into a clean project. `scripts/accept-portable-hub.mjs --installation /absolute/consumer --output /private/new-receipt.json` boots the installed CLI with a disposable operator master, activates through owner APIs, obtains the agent key through the UI's API, makes **one real public GET** through the official MCP SDK, reuses its task/receipt after restart, and verifies revocation after restart. A provider outage fails the check; there is no mock replacement. This does not test Keychain, private OAuth or business outcomes.
+
+The original `nuluno-access-community` CLI and `dist/server.mjs` entry remain available. `createAccessApp` is also exported by `./app` as a pure factory so bundling the Hub cannot accidentally start the old CLI.
+
+This remains a candidate. macOS helper consent/signing upgrades, Linux CI and actual browser acceptance must be reported for their exact tested environment; an operator-env consumer pass is not proof that every Mac or hosted deployment is ready.
