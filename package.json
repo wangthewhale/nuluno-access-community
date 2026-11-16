@@ -15,6 +15,7 @@
     "src",
     "README.md",
     "Dockerfile",
+    ".dockerignore",
     "compose.yaml",
     "THIRD_PARTY.md",
     "SECURITY.md",
