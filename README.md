@@ -9,7 +9,8 @@ after another restart.
 [One-command trial (Node 24)](docs/one-command-trial.md) ·
 [Try the real task](#first-run-read-one-real-public-status) ·
 [Let your agent set it up](SETUP.md) ·
-[Inspect the actual proof](docs/evidence/first-use-anonymous-alpha2-20261115.json)
+[Inspect the 2026-11-15 proof](docs/evidence/first-use-anonymous-alpha2-20261115.json) ·
+[Anonymous run of published source (2026-11-16)](docs/evidence/one-command-published-20261116.json)
 
 ![Recorded Access public read, same task across processes and persistent revoked-key denial](docs/images/first-use-proof.svg)
 
@@ -70,6 +71,10 @@ The [version-bound alpha.2 Linux receipt](docs/evidence/first-use-0.1.0-alpha.2-
 | Durable tasks and uncertain-write reconciliation | Account-signup pipeline |
 | MCP, REST and JavaScript SDK | Threads connector |
 | Public Mastodon reads; official OAuth and bounded posting for an existing Mastodon account | Other advanced connectors when installed and authorized |
+
+The community core and public trial are free.
+[Compare the free core and paid advanced extension](https://access.nuluno.com/?lang=en).
+The extension is optional; a purchase does not supply provider consent.
 
 Connecting a private existing account still requires the owner's official
 consent. An extension or paid license does not supply that consent. CAPTCHA and
