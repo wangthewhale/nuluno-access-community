@@ -1,0 +1,121 @@
+{
+  "schema": "nuluno-anonymous-alpha2-first-use-v1",
+  "passed": true,
+  "product": "access",
+  "observed_at": "2026-11-15T02:52:00.216565+00:00",
+  "source_commit": "5d1c9f0da2e4b8802e4c86c065849b12b1c5dc3e",
+  "source_repository": "https://github.com/wangthewhale/nuluno-access-community",
+  "package_version": "0.1.0-alpha.2",
+  "helper_path": "examples/public-status/read-once.mjs",
+  "helper_sha256": "acc7c06c1c8a4d9f53f59ecbf1ab4eeb6362d6f004f9ef3fa3a9fba74fb1223b",
+  "sdk_files_sha256": {
+    "src/core/client.ts": "f5c0432abd8d8214108e408e1cf34aa397dc3250e01cadb343b025e8a1118f9f",
+    "dist/core/client.mjs": "6109152d8356c7ed35e01ad9f72701863ce400c7437187af761f10386add7af4",
+    "scripts/mcp-stdio-bridge.mjs": "94e52885ddb409daf337fd1ad7081cdad43be353eed19fbc67e9b2ab97348863",
+    "dist/server.mjs": "a3c8c05250302404094446c93fb5bacbd3d507c85941b36a19ac309c3d42bbd4"
+  },
+  "host": {
+    "platform": "darwin",
+    "architecture": "arm64",
+    "node": "v24.22.1",
+    "python": null
+  },
+  "anonymous_exact_commit_install": true,
+  "resumed_after_harness_config_error_before_provider_task": true,
+  "earlier_setup_only_source_commit": "3c0e31ee5bdf25bbe6640ad70481fe07fc53a5d1",
+  "personal_git_pip_npm_config_used": false,
+  "nuluno_website_session_used": false,
+  "original_runtime_or_private_extension_used": false,
+  "steps": [
+    {
+      "stage": "first_public_task",
+      "exit_code": 0,
+      "result": {
+        "schema": "nuluno-public-status-notebook-v1",
+        "passed": true,
+        "observedAt": "2026-11-15T02:51:59.515Z",
+        "packageVersion": "0.1.0-alpha.2",
+        "node": "v24.22.1",
+        "publicUrl": "https://mastodon.social/@Mastodon/117466985005297414",
+        "statusId": "117466985005297414",
+        "taskId": "80402c9e-59d1-43b9-bf23-4aec57fa9912",
+        "receiptHash": "fe3a4dc2af54404f1bd0fd43c506877330a5c78625a2c64be1b21c867feaf978",
+        "resumedOriginalTask": false,
+        "sameTaskAcrossMcpAndSdk": true,
+        "providerCalls": 1,
+        "providerWrites": 0,
+        "publicTextBytes": 313,
+        "publicTextSha256": "29f5169f35f53389e756f84223e99369462505ea68fffcd27750bbcabc545cad",
+        "untrustedData": true,
+        "modelCalls": 0,
+        "fullCostMicros": null,
+        "privateAccountConnected": false
+      }
+    },
+    {
+      "stage": "new_process_original_task",
+      "exit_code": 0,
+      "result": {
+        "schema": "nuluno-public-status-notebook-v1",
+        "passed": true,
+        "observedAt": "2026-11-15T02:51:59.758Z",
+        "packageVersion": "0.1.0-alpha.2",
+        "node": "v24.22.1",
+        "publicUrl": "https://mastodon.social/@Mastodon/117466985005297414",
+        "statusId": "117466985005297414",
+        "taskId": "80402c9e-59d1-43b9-bf23-4aec57fa9912",
+        "receiptHash": "fe3a4dc2af54404f1bd0fd43c506877330a5c78625a2c64be1b21c867feaf978",
+        "resumedOriginalTask": true,
+        "sameTaskAcrossMcpAndSdk": true,
+        "providerCalls": 1,
+        "providerWrites": 0,
+        "publicTextBytes": 313,
+        "publicTextSha256": "29f5169f35f53389e756f84223e99369462505ea68fffcd27750bbcabc545cad",
+        "untrustedData": true,
+        "modelCalls": 0,
+        "fullCostMicros": null,
+        "privateAccountConnected": false
+      }
+    },
+    {
+      "stage": "revoke_original_key",
+      "exit_code": 0,
+      "result": {
+        "schema": "nuluno-public-status-revocation-v1",
+        "passed": true,
+        "observedAt": "2026-11-15T02:51:59.975Z",
+        "originalKeyRevoked": true,
+        "newKeyCreated": false,
+        "agentDenied": true,
+        "providerWrites": 0,
+        "fullCostMicros": null
+      }
+    },
+    {
+      "stage": "new_process_native_denial",
+      "exit_code": 3,
+      "result": {
+        "schema": "nuluno-public-status-revoked-denial-v1",
+        "passed": true,
+        "observedAt": "2026-11-15T02:52:00.194Z",
+        "originalKeyRevoked": true,
+        "newKeyCreated": false,
+        "agentDenied": true,
+        "afterFreshServiceProcess": true,
+        "originalTaskId": "80402c9e-59d1-43b9-bf23-4aec57fa9912",
+        "originalReceiptHash": "fe3a4dc2af54404f1bd0fd43c506877330a5c78625a2c64be1b21c867feaf978",
+        "providerWrites": 0,
+        "fullCostMicros": null,
+        "readSucceeded": false
+      }
+    }
+  ],
+  "model_calls": 0,
+  "external_provider_writes": 0,
+  "complete_cost": null,
+  "outside_human_trial": false,
+  "private_inbox_signup_publication_proven": false,
+  "linux_claimed": false,
+  "sales_lift_proven": false,
+  "private_state_or_credentials_included": false
+}

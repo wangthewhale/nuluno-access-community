@@ -1,15 +1,32 @@
 # Nuluno Access Community
 
-**Give an agent a limited key. Keep platform credentials in your service.**
+**Keep provider credentials in Access. Give agents limited keys.**
 
-I built Access because connecting an agent should not mean handing it every
-credential or starting the same external operation again after a restart.
-Access stores credentials in an encrypted vault, issues scoped agent keys,
-keeps original tasks and reconciles uncertain writes. You can revoke future
-operations without giving the agent a replacement key.
+Read one real public Mastodon status through MCP and the SDK. Restart the
+service and recover the same task. Revoke its key and verify the native denial
+after another restart.
 
-The free Apache-2.0 core runs on your own host. Standard MCP, REST and the
-JavaScript SDK use the same durable service and task identities.
+[Try the real task](#first-run-read-one-real-public-status) ·
+[Let your agent set it up](SETUP.md) ·
+[Inspect the actual proof](docs/evidence/first-use-anonymous-alpha2-20261115.json)
+
+![Recorded Access public read, same task across processes and persistent revoked-key denial](docs/images/first-use-proof.svg)
+
+*Recorded 2026-11-15 · macOS/arm64 · operator run.*
+
+## Tell your agent
+
+```text
+Use Nuluno Access. Read https://raw.githubusercontent.com/wangthewhale/nuluno-access-community/main/SETUP.md
+and run its real
+public-status first-use task. Show the original task, receipt and native
+revocation proof. Keep owner/provider credentials out of prompts and output.
+```
+
+The independent Apache-2.0 core provides account/action-scoped keys, an encrypted
+vault, durable tasks, MCP, REST and a JavaScript SDK. This public trial needs no
+private account connection or model API key. Tenant and account boundaries
+remain in force; one user's authorization is not authority over every mailbox.
 
 ## First run: read one real public status
 

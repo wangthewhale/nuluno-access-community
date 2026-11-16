@@ -8,7 +8,7 @@ import {fileURLToPath,pathToFileURL} from 'node:url';
 import {parseArgs} from 'node:util';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
-const top=new Set(['README.md','LICENSE','NOTICE','THIRD_PARTY.md','SECURITY.md','CONTRIBUTING.md','package.json','package-lock.json','Dockerfile','compose.yaml','tsconfig.json','tsconfig.build.json','.gitignore','.dockerignore','.env.example']);
+const top=new Set(['README.md','SETUP.md','LICENSE','NOTICE','THIRD_PARTY.md','SECURITY.md','CONTRIBUTING.md','package.json','package-lock.json','Dockerfile','compose.yaml','tsconfig.json','tsconfig.build.json','.gitignore','.dockerignore','.env.example']);
 const dirs=new Set(['.github','src','tests','scripts','docs','evidence','examples']);
 const forbidden=new Set(['.git','.private','private','node_modules','state','credentials','commercial-extension']);
 const hash=data=>createHash('sha256').update(data).digest('hex');
