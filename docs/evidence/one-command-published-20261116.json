@@ -1,0 +1,166 @@
+{
+  "schema": "nuluno-published-one-command-acceptance-v1",
+  "product": "access",
+  "passed": true,
+  "observedAt": "2026-11-16T04:20:54.276832+00:00",
+  "repository": "https://github.com/wangthewhale/nuluno-access-community",
+  "sourceCommit": "f7ee857ece54355c9dba39ca986e99e4ebbdacae",
+  "downloadMethod": "anonymous public git clone; empty global/system Git config and no credential helper",
+  "originalReleaseTagsOrAssetsChanged": false,
+  "cleanCheckoutBeforeAndAfter": true,
+  "trial": {
+    "schema": "nuluno-one-command-public-trial-v1",
+    "product": "access",
+    "passed": true,
+    "observedAt": "2026-11-16T04:20:54.029Z",
+    "packageVersion": "0.1.0-alpha.2",
+    "sourceSnapshotSha256": "26b4bf9d546d2023d6b72fe720ed9b77ded10bb3c98891c098b106d67f6f193f",
+    "sourceFiles": 72,
+    "baseCheckoutCommit": "f7ee857ece54355c9dba39ca986e99e4ebbdacae",
+    "checkoutClean": true,
+    "bootstrapSha256": "4c49a9cbf6ab10575f03400a6f4f605b6a6aec1d5765045cfc3081519d235f33",
+    "helperSha256": "acc7c06c1c8a4d9f53f59ecbf1ab4eeb6362d6f004f9ef3fa3a9fba74fb1223b",
+    "steps": [
+      {
+        "stage": "read",
+        "expectedExit": 0,
+        "result": {
+          "schema": "nuluno-public-status-notebook-v1",
+          "passed": true,
+          "observedAt": "2026-11-16T04:20:53.251Z",
+          "packageVersion": "0.1.0-alpha.2",
+          "node": "v24.22.1",
+          "publicUrl": "https://mastodon.social/@Mastodon/117466985005297414",
+          "statusId": "117466985005297414",
+          "taskId": "fb9eb98f-a1d1-4088-a785-77e55806fa4f",
+          "receiptHash": "fe3a4dc2af54404f1bd0fd43c506877330a5c78625a2c64be1b21c867feaf978",
+          "resumedOriginalTask": false,
+          "sameTaskAcrossMcpAndSdk": true,
+          "providerCalls": 1,
+          "providerWrites": 0,
+          "publicTextBytes": 313,
+          "publicTextSha256": "29f5169f35f53389e756f84223e99369462505ea68fffcd27750bbcabc545cad",
+          "untrustedData": true,
+          "modelCalls": 0,
+          "fullCostMicros": null,
+          "privateAccountConnected": false
+        }
+      },
+      {
+        "stage": "resume",
+        "expectedExit": 0,
+        "result": {
+          "schema": "nuluno-public-status-notebook-v1",
+          "passed": true,
+          "observedAt": "2026-11-16T04:20:53.527Z",
+          "packageVersion": "0.1.0-alpha.2",
+          "node": "v24.22.1",
+          "publicUrl": "https://mastodon.social/@Mastodon/117466985005297414",
+          "statusId": "117466985005297414",
+          "taskId": "fb9eb98f-a1d1-4088-a785-77e55806fa4f",
+          "receiptHash": "fe3a4dc2af54404f1bd0fd43c506877330a5c78625a2c64be1b21c867feaf978",
+          "resumedOriginalTask": true,
+          "sameTaskAcrossMcpAndSdk": true,
+          "providerCalls": 1,
+          "providerWrites": 0,
+          "publicTextBytes": 313,
+          "publicTextSha256": "29f5169f35f53389e756f84223e99369462505ea68fffcd27750bbcabc545cad",
+          "untrustedData": true,
+          "modelCalls": 0,
+          "fullCostMicros": null,
+          "privateAccountConnected": false
+        }
+      },
+      {
+        "stage": "revoke",
+        "expectedExit": 0,
+        "result": {
+          "schema": "nuluno-public-status-revocation-v1",
+          "passed": true,
+          "observedAt": "2026-11-16T04:20:53.755Z",
+          "originalKeyRevoked": true,
+          "newKeyCreated": false,
+          "agentDenied": true,
+          "providerWrites": 0,
+          "fullCostMicros": null
+        }
+      },
+      {
+        "stage": "denial",
+        "expectedExit": 3,
+        "result": {
+          "schema": "nuluno-public-status-revoked-denial-v1",
+          "passed": true,
+          "observedAt": "2026-11-16T04:20:53.998Z",
+          "originalKeyRevoked": true,
+          "newKeyCreated": false,
+          "agentDenied": true,
+          "afterFreshServiceProcess": true,
+          "originalTaskId": "fb9eb98f-a1d1-4088-a785-77e55806fa4f",
+          "originalReceiptHash": "fe3a4dc2af54404f1bd0fd43c506877330a5c78625a2c64be1b21c867feaf978",
+          "providerWrites": 0,
+          "fullCostMicros": null,
+          "readSucceeded": false
+        }
+      }
+    ],
+    "modelCalls": 0,
+    "externalProviderWrites": 0,
+    "dependencySetupNetworkCalls": null,
+    "completeCost": null,
+    "privateAccountUsed": false,
+    "existingInstallOrStateReplaced": false,
+    "temporaryPrivateConsumerRemovedAfterSuccess": true
+  },
+  "replay": {
+    "schema": "nuluno-recorded-trial-replay-v1",
+    "product": "access",
+    "state": "replayed_recorded_trial",
+    "historicalPassed": true,
+    "executedCurrentTrial": false,
+    "newProviderActions": 0
+  },
+  "steps": [
+    {
+      "step": "anonymous-clone",
+      "exitCode": 0
+    },
+    {
+      "step": "exact-checkout",
+      "exitCode": 0
+    },
+    {
+      "step": "head",
+      "exitCode": 0
+    },
+    {
+      "step": "clean-before",
+      "exitCode": 0
+    },
+    {
+      "step": "one-command-actual",
+      "exitCode": 0
+    },
+    {
+      "step": "historical-replay",
+      "exitCode": 0
+    },
+    {
+      "step": "clean-after",
+      "exitCode": 0
+    }
+  ],
+  "completeCost": null,
+  "modelCalls": 0,
+  "externalProviderWrites": 0,
+  "sourceRelationship": "This evidence-only follow-up records the preceding exact source commit. It does not assert that later documentation commits were independently rerun.",
+  "linuxCi": {
+    "runId": 43803469261,
+    "jobId": 133088784512,
+    "conclusion": "success",
+    "actualContainerBoot": true,
+    "stateAndRevocationPersisted": true,
+    "url": "https://github.com/wangthewhale/nuluno-access-community/actions/runs/43803469261"
+  },
+  "immutableReleaseRelationship": "Current-source addon; not included in the existing alpha2 tag or its four immutable release assets."
+}

@@ -41,3 +41,7 @@ This driver is an addon in current `main`; it is not part of the immutable alpha
 [Actual terminal lines](evidence/one-command-terminal-20261116.txt) · [Machine receipt](evidence/one-command-first-use-20261116.json) · [Existing helper and manual procedure](../examples/public-status/README.md)
 
 The verified scope is public reads, original-task reuse and revocation. This does not verify private Gmail, automatic social registration, posting or bypassing a platform's consent/CAPTCHA.
+
+## Anonymous published-source check
+
+An anonymous clean checkout of `f7ee857ece54355c9dba39ca986e99e4ebbdacae` also ran the one command and its recorded replay successfully. [Exact commit-bound machine record](evidence/one-command-published-20261116.json). The expected helper exits were `[0, 0, 0, 3]`; the later driver replay performed zero new provider actions. This separately records the published-source check and does not replace the earlier operator trial. The existing alpha2 tag and assets remain unchanged.
